@@ -17,10 +17,11 @@
 # Students should implement their own models, specifying the columns using `Column` and selecting the appropriate
 # `types` for each column, such as `Integer`, `String`, `Boolean`, etc.
 #
-# Below you can find two models examples that demonstrate the usage of the base class
 
 from api.columns import Column
 from api.datatypes import Integer, String, Boolean
 from api.base import Base
+
+
 
 

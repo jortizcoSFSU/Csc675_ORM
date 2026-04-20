@@ -62,6 +62,7 @@ class Base:
         """
         pass
 
+
     def _update(self):
         """Update the current instance in the database.
 
@@ -71,9 +72,8 @@ class Base:
             - Ensure the connection and cursor are properly closed after the operation, even if an error occurs.
             - Commit the transaction if successful; rollback if there's an error.
         """
-
-
         pass
+
 
     @classmethod
     def get(cls, id):
@@ -86,6 +86,7 @@ class Base:
             - Handle potential exceptions using `try`, `except`, and `finally` blocks.
         """
         pass
+
 
 
 
