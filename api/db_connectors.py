@@ -20,14 +20,17 @@ class MySQL:
             mysql.connector.Error: If there is an error during connection
         """
         connection = mysql.connector.connect(
-            host=os.getenv("DB_HOST", "localhost"),
-            user=os.getenv("DB_USER", "root"),
-            password=os.getenv("DB_PASSWORD", ""),
-            database=os.getenv("DB_NAME", "")
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_NAME")
         )
 
         # Return rows as dictionaries (not tuples), which allows key-based access to column values
         cursor = connection.cursor(dictionary=True)
         return connection, cursor
+
+
+
 
 

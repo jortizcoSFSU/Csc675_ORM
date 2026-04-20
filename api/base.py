@@ -85,19 +85,7 @@ class Base:
             - Ensure the connection and cursor are properly closed after the operation.
             - Handle potential exceptions using `try`, `except`, and `finally` blocks.
         """
-        table = cls.table_descriptor()
-        pk = cls.primary_key()
-        sql = f"SELECT * FROM {table} WHERE {pk}=%s"
-        conn, cursor = MySQL.instance()
-        try:
-            cursor.execute(sql, (id,))
-            result = cursor.fetchone()
-            if result:
-                return cls(**result)
-            return None
-        finally:
-            cursor.close()
-            conn.close()
+        pass
 
 
 
@@ -209,16 +197,20 @@ class Base:
 
     @classmethod
     def table_descriptor(cls):
-        pass
+        return cls.__name__
 
     # Remove this
     @classmethod
     def columns(cls):
-        pass
+        return {name:column for name, column in cls.__dict__.items() if isinstance(column, Column)}
 
     # Remove this
     @classmethod
     def primary_key(cls):
-        pass
+        columns = cls.columns()
+        for name, column in columns.items():
+            if column.is_primary_key():
+                return name
+        return 'id'
 
 
