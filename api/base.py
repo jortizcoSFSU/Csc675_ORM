@@ -197,20 +197,26 @@ class Base:
 
     @classmethod
     def table_descriptor(cls):
-        return cls.__name__
+        """
+        :return: the name of the table t
+        """
+        pass
 
-    # Remove this
+
     @classmethod
     def columns(cls):
-        return {name:column for name, column in cls.__dict__.items() if isinstance(column, Column)}
+        """
+        :return: the list of column names
+        """
+        pass
 
-    # Remove this
+
     @classmethod
     def primary_key(cls):
-        columns = cls.columns()
-        for name, column in columns.items():
-            if column.is_primary_key():
-                return name
-        return 'id'
+        """
+        :return: the primary key attribute name, not the value.
+                 for example student_id = 1, will return student_id, not the value 1
+        """
+        pass
 
 
