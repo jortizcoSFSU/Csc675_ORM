@@ -21,6 +21,40 @@
 from api.columns import Column
 from api.datatypes import Integer, String, Boolean
 from api.base import Base
+from datetime import date
+
+class Artist(Base):
+    # match exactly the name of your table (case-sensitive)
+    __name__ = "Artist"
+
+    # properties they need to match exactly the names of your
+    # attributes in this table
+
+    artist_id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    publisher = "Jose"
+
+    def __repr__(self):
+        return f"Artist(artist_id: {self.artist_id}, name: {self.name})"
+
+class Album(Base):
+    __name__ = "Album"
+    album_id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    year_released = Column(Integer, nullable=False)
+
+
+    # derived attribute
+    @property
+    def age(self):
+        return date.today().year - self.year_released
+
+
+    def __repr__(self):
+        return f"Album(album_id: {self.album_id}, title: {self.title}, year_released: {self.year_released})"
+
+
+
 
 
 

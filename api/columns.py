@@ -57,7 +57,7 @@ class Column:
     def validate_type(self):
         pass
 
-    # TODO: Implement a method to check if the column is part of a primary key.
+
     def is_primary_key(self):
         if self.primary_key:
             return True
