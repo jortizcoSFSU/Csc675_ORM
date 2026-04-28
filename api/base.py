@@ -36,6 +36,13 @@ from api.columns import Column
 
 
 class Base:
+    # track = Track.get(id..)
+    _registry = {} # {key=__name__, value: class model}
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        Base._registry[cls.table_descriptor()] = cls
+
     def __init__(self, **kwargs):
         """Initialize model instance with attributes."""
         for key, value in kwargs.items():
@@ -305,5 +312,6 @@ class Base:
                 return name
         return 'id'
 
-
-
+    @classmethod
+    def resolve_model(cls, model_name):
+        return cls._registry[model_name]

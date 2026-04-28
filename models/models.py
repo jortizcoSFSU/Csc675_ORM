@@ -23,6 +23,9 @@ from api.datatypes import Integer, String, Boolean
 from api.base import Base
 from datetime import date
 
+from api.relations import Relation
+
+
 class Artist(Base):
     # match exactly the name of your table (case-sensitive)
     __name__ = "Artist"
@@ -38,20 +41,30 @@ class Artist(Base):
         return f"Artist(artist_id: {self.artist_id}, name: {self.name})"
 
 class Album(Base):
-    __name__ = "Album"
+    __name__ = 'Album'
     album_id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
-    year_released = Column(Integer, nullable=False)
-
-
-    # derived attribute
-    @property
-    def age(self):
-        return date.today().year - self.year_released
-
+    year_released = Column(String, nullable=False)
 
     def __repr__(self):
-        return f"Album(album_id: {self.album_id}, title: {self.title}, year_released: {self.year_released})"
+        return f"Album(album_id: {self.album_id}, title: {self.title})"
+
+
+
+class Track(Base):
+    __name__ = "Track"
+
+    track_id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    album_id = Column(Integer, nullable=False, foreign_key=True)
+    artist_id = Column(Integer, nullable=False, foreign_key=True)
+    genre_id = Column(Integer, nullable=False, foreign_key=True)
+
+    album_object = Relation(model_name='Album', foreign_key='album_id', backreference='track', lazy_load=False)
+
+    def __repr__(self):
+        return f"Track(track_id: {self.track_id}, title: {self.title})"
+
 
 
 

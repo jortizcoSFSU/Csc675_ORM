@@ -1,25 +1,26 @@
 # This file is to perform tests to models such as getting a record, inserting, updating ...
 
-from models.models import Artist, Album
+# We covered last lecture:
 
-# create a new album in the database
-album = Album.create(title="new album", year_release=2000)
+from models.models import Album, Track
 
-# get an existing album from the database with id=1
-album1 = Album.get(id=1)
+track7 = Track.get(id=7) # track_id = 7
+track9 = Track.get(id=9) # track_id = 9
 
-# update the title of an existing album in the database
-album1.title = "New title"
-album.save()
+album1 = track7.album_object # album_id = 5
+album2 = track9.album_object # album_id = 5
 
-# get all albums from the database
-albums = Album.all()
+track7_ref = album1.track
+track9_ref = album2.track
 
-
+print(track7_ref is track7)
 
 
+# Imagine an album has many tracks
 
-
+track7 = Track.get(id=7) # track_id = 7
+album1 = track7.album_object # album_id = 5
+all_tracks = album1.tracks
 
 
 
