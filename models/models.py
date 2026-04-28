@@ -67,7 +67,10 @@ class Track(Base):
 
 
 
-
+class Publisher(Base):
+    __name__ = 'Publisher'
+    publisher_id = Column(Integer, primary_key=True) # publisher_id INT PRIMARY KEY
+    name = Column(String, nullable=False) # name VARCHAR(55) NOT NULL
 
 
 
