@@ -60,17 +60,20 @@ class Track(Base):
     artist_id = Column(Integer, nullable=False, foreign_key=True)
     genre_id = Column(Integer, nullable=False, foreign_key=True)
 
-    album_object = Relation(model_name='Album', foreign_key='album_id', backreference='track', lazy_load=False)
+    album_object = Relation(model_name='Album',
+                            foreign_key='album_id',
+                            backreference='track',
+                            lazy=False)
+    artist_object = Relation(model_name='Artist',
+                             foreign_key='artist_id',
+                             backreference='artist',
+                             lazy=True)
 
-    def __repr__(self):
-        return f"Track(track_id: {self.track_id}, title: {self.title})"
 
 
 
-class Publisher(Base):
-    __name__ = 'Publisher'
-    publisher_id = Column(Integer, primary_key=True) # publisher_id INT PRIMARY KEY
-    name = Column(String, nullable=False) # name VARCHAR(55) NOT NULL
+
+
 
 
 

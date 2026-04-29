@@ -36,6 +36,17 @@ from api.columns import Column
 
 
 class Base:
+    """
+    example of registry
+    track7 = Track.get(id=7)
+    """
+    _registry = {} # {key='Track', value=Track}
+    _identity_map = {} # {key='Track', value=7}
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        Base._registry[cls.table_descriptor()] = cls
+
 
 
     def __init__(self, **kwargs):
@@ -132,15 +143,15 @@ class Base:
             connection.close()
             cursor.close()
 
-
     @classmethod
     def get(cls, id):
-        """Retrieve a record from the database by its ID.
-        """
-        # SELECT * FROM <table> WHERE <pk> = %s
+        key = cls.identity_key(id)
+
+        if key in cls._identity_map:
+            return cls.get_identity_instance(id)
+
         table = cls.table_descriptor()
         pk = cls.primary_key()
-
         query = f"SELECT * FROM {table} WHERE {pk} = %s"
 
         connection, cursor = MySQL.instance()
@@ -148,14 +159,18 @@ class Base:
         try:
             cursor.execute(query, (id,))
             result = cursor.fetchone()
-            return cls(**result)
 
-        except Exception as e :
-            # handle errors and any rollbacks
+            if result is None:
+                return None
+
+            obj = cls(**result)
+            cls.add_identity_instance(obj)
+            return obj
+
+        except Exception as e:
             raise e
 
         finally:
-            # close components to avoid memory leaks
             connection.close()
             cursor.close()
 
@@ -306,4 +321,36 @@ class Base:
             if column.is_primary_key():
                 return name
         return 'id'
+
+    @classmethod
+    def resolve_model(cls, model_name):
+        return cls._registry[model_name] # return Track class
+
+    @classmethod
+    def identity_key(cls, pk_value):
+
+        return (cls.table_descriptor(), pk_value)
+
+    @classmethod
+    def get_identity_instance(cls, pk_value):
+
+        key = cls.identity_key(pk_value)
+
+        return cls._identity_map.get(key)
+
+    @classmethod
+    def add_identity_instance(cls, obj):
+
+        pk = cls.primary_key()
+
+        pk_value = getattr(obj, pk, None)
+
+        if pk_value is None:
+            return obj
+
+        key = cls.identity_key(pk_value)
+
+        cls._identity_map[key] = obj
+
+        return obj
 
