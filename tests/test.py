@@ -34,6 +34,16 @@ print(track1 is track2) # true because we implemented in the base case identity 
 print(track1.album_object is track2.album_object) # true because both instances are the same instance pointing to the same album
 print(track1.album_object.track is track2.album_object.track) # true because both backreferences are pointing to the same track instance
 
+# Example service methods so we do not expose the class to the final user of the application
+# In this case we added two layers of encapsulation
+#    1. We encapsulated SQL code
+#    2. We encapsulated class models exposure.
+def get_track(track_id):
+    return Track.get(id=track_id)
+
+def get_album_by_track(track_id):
+    track = get_track(track_id)
+    return track.album_object
 
 
 
